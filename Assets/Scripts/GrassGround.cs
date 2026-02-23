@@ -10,6 +10,8 @@ public class GrassData
     public bool isSpread;
     public float createTime;
     public float ingTime;
+
+    //ui 표시를 위한 메서드 추가
 }
 
 
@@ -18,12 +20,8 @@ public class GrassGround : MonoBehaviour
     bool hasGrass = false;
     GrassData grassData;
 
-    public Sprite grassSprite;
+    public SpriteRenderer grassSprite;
 
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
@@ -33,7 +31,7 @@ public class GrassGround : MonoBehaviour
             if(grassData !=null) //널체크
             {
                 grassData.ingTime = Time.time - grassData.createTime;
-                Debug.Log("현재 생존 시간 : " + grassData.ingTime);
+                //Debug.Log("현재 생존 시간 : " + grassData.ingTime);
             }
         }
     }
@@ -46,7 +44,7 @@ public class GrassGround : MonoBehaviour
         grassData = new GrassData();
         InitGrassData();
         //스프라이트 교체
-        grassSprite = SpriteManager.Instance.GetLVSprite(grassData.level);
+        grassSprite.sprite = SpriteManager.Instance.GetLVSprite(grassData.level);
         //hasGrass = true;
         hasGrass = true;
     }
@@ -76,7 +74,7 @@ public class GrassGround : MonoBehaviour
 
         hasGrass = false;
 
-        grassSprite = SpriteManager.Instance.GetLVSprite(0);
+        grassSprite.sprite = SpriteManager.Instance.GetLVSprite(0);
     }
 
     void OnHit() //밟힐 경우
@@ -121,7 +119,14 @@ public class GrassGround : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!hasGrass) return;
+        //test 용 
+        if (!hasGrass)
+        {
+            CreateGrass();
+            Debug.Log("잔디가 생성되었습니다.");
+            return;
+        }
+        //if (!hasGrass) return;
 
         OnHeal();
         Debug.Log("잔디가 회복되었습니다. 현재 HP: " + grassData.hp);
@@ -130,7 +135,7 @@ public class GrassGround : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // npc 태그 검사
-        if(grassData != null && collision.CompareTag("NPC"))
+        if(hasGrass && collision.CompareTag("NPC"))
         {
             //onHit() 함수 호출
             OnHit();
