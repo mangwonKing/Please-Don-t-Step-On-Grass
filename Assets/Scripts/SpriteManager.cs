@@ -18,7 +18,7 @@ public class SpriteManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    Sprite GetLVSprite(int lv) // 레벨별 스프라이트를 제공해준다. 0레벨은 기본
+    public Sprite GetLVSprite(int lv) // 레벨별 스프라이트를 제공해준다. 0레벨은 기본
     {
         return lvSprites[lv];
     }
